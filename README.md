@@ -1,6 +1,6 @@
 # Proyecto Final — Pipeline CI/CD de ML con MLflow y GitHub Actions
 
-**Estudiante:** Emily Delcarmen Tench Pérez
+**Estudiante:** Emily Del Carmen Tench Pérez
 **Curso:** MLOps y Analítica en la Nube — 2026-1
 
 Pipeline reproducible de Machine Learning que entrena un clasificador binario
