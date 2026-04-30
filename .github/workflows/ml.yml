@@ -1,0 +1,55 @@
+name: CI/CD ML Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  ml_pipeline:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Clonar repositorio
+        uses: actions/checkout@v4
+
+      - name: 🐍 Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+
+      - name: 📦 Instalar dependencias
+        run: make install
+
+      - name: 🧹 Lint del código
+        run: make lint
+
+      - name: 🧪 Entrenar modelo y registrar en MLflow
+        run: make train
+
+      - name: ✅ Ejecutar pruebas
+        run: make test
+
+      - name: 📤 Subir modelo entrenado (model.pkl)
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: modelo-entrenado
+          path: model.pkl
+
+      - name: 📤 Subir métricas (metrics.json)
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: metricas
+          path: metrics.json
+
+      - name: 📤 Subir registro completo de MLflow (mlruns/)
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mlruns
+          path: mlruns/
